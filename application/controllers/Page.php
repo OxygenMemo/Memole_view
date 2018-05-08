@@ -22,4 +22,7 @@ class Page extends CI_Controller {
 	{
 		$this->load->view('fblogin');
 	}
+	public function login(){
+		$this->load->view('login');
+	}
 }
