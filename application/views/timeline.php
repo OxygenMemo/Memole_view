@@ -163,7 +163,7 @@ body {
 
 <?php require("template/menu.php") ?>
 <div style="border-radius: 6px;padding: 20px;background-color: white;position: fixed;top: 160px ;left: 0;">
-<li id="timeline-dropdown" class="dropdown"><a class="dropdown-toggle " data-toggle="dropdown" href="#">timeline<span class="caret"></span></a>
+  <li style="z-index: 1;" id="timeline-dropdown" class="dropdown"><a class="dropdown-toggle " data-toggle="dropdown" href="#">timeline<span class="caret"></span></a>
         <ul id="timeline-dropdown-list" class="dropdown-menu">
           <li onclick="switchtimeline(1)"><a href="#">Page 1-1</a></li>
           <li><a href="#">Page 1-2</a></li>
@@ -171,7 +171,7 @@ body {
         </ul>
       </li>
 </div>
-<div style="border-radius: 6px;padding: 20px;background-color: white;position: fixed;top: 60px ;left: 0;">
+<div style="z-index: 1;border-radius: 6px;padding: 20px;background-color: white;position: fixed;top: 60px ;left: 0;">
   <li id="createtimeline" onclick="createtimeline()"><a>createtimeline</a></li>
 </div>
 <div id="inner">
@@ -185,9 +185,12 @@ article : <input id=article type="text"><br>
 time : <input id=date type="date"><br>
 <button onclick="addtext()">add text<button>
 </div>
+<div id="timeline_name" style="border-radius: 6px;padding: 20px;background-color: white;position: fixed;bottom:200px;left:0;">
+
+</div>
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 <script>
-
+  $("#timeline_name").hide()
   // This is called with the results from from FB.getLoginStatus().
   let user_id ="";
   function statusChangeCallback(response) {
@@ -269,8 +272,7 @@ time : <input id=date type="date"><br>
     $.get(`https://localhost:8082/user/${userid}/timeline`, function(data, status){
       let html=""
         for(let i =0 ;i<data.length;i++){
-          html +=`<li onclick="switchtimeline(${data[i].timeline_id})"><a>${data[i].timeline_name}</a></li>`
-          
+          html +=`<li style="z-index:1;" onclick="switchtimeline(${data[i].timeline_id},'${data[i].timeline_name}')"><a>${data[i].timeline_name}</a></li>`
         }
         $('#timeline-dropdown-list').html(html)
         $("#timeline-dropdown").show()
@@ -306,7 +308,12 @@ time : <input id=date type="date"><br>
    
   }
   let timeline_id = ""
-  function switchtimeline(id){
+  
+  function switchtimeline(id,name){
+    let x=`timeline : ${name} <span style="cursor: pointer;" onclick='deletetimeline(${id})' class='glyphicon glyphicon-trash'></span>`;
+    $("#timeline_name").html(x)
+    $("#timeline_name").show();
+
     timeline_id = id 
     $.get(`https://localhost:8082/timeline/${id}/text`, function(data, status){
       let html=""
@@ -314,6 +321,7 @@ time : <input id=date type="date"><br>
         let html = "<h1 style='margin-left:100px;color:white'>No text</h1>"
         $('#mytimeline').html(html)
       }else{
+        
         for(let i =0 ;i<data.length;i++){
           
           if(i%2==0){
@@ -349,6 +357,17 @@ time : <input id=date type="date"><br>
 
     }
 });
+  }
+  function deletetimeline(id){
+    $.ajax({
+      url: `https://localhost:8082/timeline/${id}`,
+      type: 'DELETE',
+      success: function(result) {
+        alert('delete complete')
+        location.reload();
+
+      }
+    });
   }
   function addtext(){
     let datax = {
