@@ -11,12 +11,23 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
     <meta charset="UTF-8">
+    <style>
+      body {
+        background-color: #474e5d;
+        font-family: Helvetica, sans-serif;
+      }
+    </style>
 </head>
 <body>
 
 <?php require("template/menu.php") ?>
 
-<div id="status">
+<div>
+  <center style="margin-top:15%;color:white;">
+  <h1>Welcome to MéMoLé</h1>
+  <p>Beta</p>
+  <p id="status"></p>
+  </center>
 </div>
 
 <script>
@@ -30,9 +41,11 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      $('#timelinelink').show();
       testAPI();
     } else {
       // The person is not logged into your app or we are unable to tell.
+      $('#timelinelink').hide();
       document.getElementById('status').innerHTML = 'Please log ' +
         'into this app.';
     }
@@ -87,10 +100,12 @@
   // successful.  See statusChangeCallback() for when this call is made.
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
-    FB.api('me?fields=id,name,email', function(response) {
+    FB.api('me?fields=id,name,email,picture.height(80).width(80)', function(response) {
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
-        'Thanks for logging in, '+ response.id +" " + response.name + ' ! ' + response.email;
+        'Thanks for logging in, <br>'+ response.name +
+        `<br><img class='img-circle'  src=${response.picture.data.url}>`;
+
     });
   }
 </script>

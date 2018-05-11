@@ -185,7 +185,7 @@ article : <input id=article type="text"><br>
 time : <input id=date type="date"><br>
 <button onclick="addtext()">add text<button>
 </div>
-<br/><br/><br/><br/><br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 <script>
 
   // This is called with the results from from FB.getLoginStatus().
@@ -199,12 +199,13 @@ time : <input id=date type="date"><br>
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      $("#timeline-dropdown").show();
+      $('#timelinelink').show();
+      
       testAPI();
     } else {
       // The person is not logged into your app or we are unable to tell.
       
-        $("#timeline-dropdown").hide();
+      $('#timelinelink').hide();
     }
   }
 
@@ -323,9 +324,12 @@ time : <input id=date type="date"><br>
           
           html += `
       <div class="mycontent">
+        
         <h2>${data[i].text_title}</h2>
         <p>${data[i].text_article}</p>
         <p>${data[i].text_date}</p>
+        
+        <span onclick="deletetext(${data[i].text_id})" class="glyphicon glyphicon-trash"></span>
       </div>
     </div>`
           
@@ -334,6 +338,17 @@ time : <input id=date type="date"><br>
       }
     });
     
+  }
+  function deletetext(id){
+    $.ajax({
+    url: `https://localhost:8082/text/${id}`,
+    type: 'DELETE',
+    success: function(result) {
+      alert('delete complete')
+      switchtimeline(timeline_id);
+
+    }
+});
   }
   function addtext(){
     let datax = {

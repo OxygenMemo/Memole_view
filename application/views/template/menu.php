@@ -2,11 +2,11 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">WebSiteName</a>
+      <a class="navbar-brand" href="#">MéMoLé beta</a>
     </div>
     <ul class="nav navbar-nav">
     <li><a href="<?= base_url() ?>index.php/page/home">home</a></li>
-    <li><a href="<?= base_url() ?>index.php/page/timeline">timeline</a></li>
+    <li id="timelinelink"><a href="<?= base_url() ?>index.php/page/timeline">timeline</a></li>
     </ul>
     
     <ul class="nav navbar-nav navbar-right">
@@ -15,7 +15,7 @@
   </div>
 </nav>
 <script>
-  $("#timeline-dropdown").hide()
+  $("#timelinelink").hide()
 </script>
 
 
