@@ -20,9 +20,13 @@ class Page extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('fblogin');
+		$this->home();
 	}
-	public function login(){
-		$this->load->view('login');
+	public function timeline(){
+		$this->load->view('timeline');
+	}
+	public function home()
+	{
+		$this->load->view('fblogin');
 	}
 }
